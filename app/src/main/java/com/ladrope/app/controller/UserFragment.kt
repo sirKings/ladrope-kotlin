@@ -90,6 +90,10 @@ class UserFragment : Fragment() {
             startActivity(editIntent)
         }
 
+        view.userTabMeasure.setOnClickListener {
+            val measureIntent = Intent(context, Measurement::class.java)
+            startActivity(measureIntent)
+        }
 
         return view
 
