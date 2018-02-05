@@ -4,52 +4,60 @@ package com.ladrope.app.Model
  * Created by USER on 2/2/18.
  */
 class Order() {
-    var name: String? = null
-    var clothKey: String? = null
+    var accepted: Boolean? = null
+    var clientAddress: String? = null
+    var clothId: String? = null
     var cost: Any? = null
-    var gender: String? = null
+    var date: Any? = null
+    var displayName: String? = null
+    var email: String? = null
     var image1: String? = null
-    var image2: String? = null
-    var image3: String? = null
-    var image4: String? = null
     var label: String? = null
     var labelEmail: String? = null
     var labelId: String? = null
     var labelPhone: String? = null
-    var likes: Int? = null
-    var numComment: Int? = null
-    var numSold: Int? = null
+    var name: String? = null
+    var orderId: String? = null
+    var ordersKey: String? = null
     var price: Long? = null
-    var rating: Double? = null
-    var tags: String? = null
-    var tailorKey: String? = null
-    var time: Any? = null
+    var size: Any? = null
+    var startDate: Any? = null
+    var status: String? = null
+    var tailorDate: Any? = null
+    var tailorOrderKey: String? = null
+    var user: String?= null
+    var userOrderKey: String? = null
+    var options: Any? = null
 
 
-    constructor(name: String?, clothKey: String?, cost: String?, gender: String?, image1: String?,
-                image2: String?, image3: String?, image4: String?, label: String?,
+    constructor(name: String?, clothId: String?, cost: Any?, clientAddress: String?, image1: String?,
+                accepted: Boolean?, date: Any?, displayName: String?, label: String?,
                 labelEmail: String?, labelPhone: String?, labelId: String?,
-                likes: Int?, numComment: Int?, numSold: Int?, price: Long?,
-                rating: Double?, tags: String?, tailorKey: String?, time: String?): this(){
-        this.clothKey = clothKey
+                email: String?, orderId: String?, ordersKey: String?, price: Long?,
+                size: Any?, startDate: Any?, tailorOrderKey: String?, tailorDate: Any?, status: String?, user: String?, userOrderKey: String?, options: Any?): this(){
+        this.clothId = clothId
         this.cost = cost
-        this.gender = gender
+        this.accepted = accepted
         this.image1 = image1
-        this.image2 = image2
-        this.image3 = image3
-        this.image4 = image4
+        this.date = date
+        this.clientAddress = clientAddress
+        this.displayName = displayName
         this.label = label
         this.labelEmail = labelEmail
         this.labelId = labelId
         this.labelPhone = labelPhone
-        this.likes = likes
-        this.numComment = numComment
-        this.numSold = numSold
+        this.email = email
+        this.orderId = orderId
+        this.size = size
         this.price = price
-        this.rating = rating
-        this.tags = tags
-        this.tailorKey = tailorKey
-        this.time = time
+        this.ordersKey = ordersKey
+        this.startDate = startDate
+        this.tailorDate = tailorDate
+        this.tailorOrderKey = tailorOrderKey
         this.name = name
+        this.user = user
+        this.status = status
+        this.userOrderKey = userOrderKey
+        this.options = options
     }
 }

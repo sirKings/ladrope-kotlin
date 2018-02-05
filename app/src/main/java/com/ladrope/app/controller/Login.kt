@@ -66,15 +66,15 @@ class Login : AppCompatActivity() {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 println("signInWithEmail:success")
-                                val currentUser = mAuth?.currentUser
-                                var photoUrl = ""
-                                if (currentUser!!.photoUrl == null){
-                                    photoUrl = "default"
-                                }else{
-                                    photoUrl = currentUser.photoUrl.toString()
-                                }
-                                val newUser = User(currentUser.displayName!!, currentUser.email!!, photoUrl,null,null,null,null,null)
-                                createUser(newUser,currentUser.uid)
+                                //val currentUser = mAuth?.currentUser
+//                                var photoUrl = ""
+//                                if (currentUser!!.photoUrl == null){
+//                                    photoUrl = "default"
+//                                }else{
+//                                    photoUrl = currentUser.photoUrl.toString()
+//                                }
+//                                val newUser = User(currentUser.displayName!!, currentUser.email!!, photoUrl,null,null,null,null,null)
+//                                createUser(newUser,currentUser.uid)
                                 startLogin(true)
                                 goHome()
                             } else {

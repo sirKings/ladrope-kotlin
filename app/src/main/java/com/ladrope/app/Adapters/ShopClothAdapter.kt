@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso
  * Created by USER on 2/1/18.
  */
 class ShopClothAdapter(options: FirebaseRecyclerOptions<Cloth>, private val context: Context): FirebaseRecyclerAdapter<Cloth, ShopClothAdapter.ViewHolder>(options){
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.cloth_row, parent, false)
         return ViewHolder(view)
@@ -47,14 +48,6 @@ class ShopClothAdapter(options: FirebaseRecyclerOptions<Cloth>, private val cont
             rating.numStars = 5
             rating.rating = cloth.rating!!.toFloat()
 
-
-//            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-//            val display = wm.defaultDisplay
-//
-//            val width = display.getWidth() // ((display.getWidth()*20)/100)
-//            val height = display.getHeight()// ((display.getHeight()*30)/100)
-//            val parms = LinearLayout.LayoutParams(width, height)
-//            clothImage.layoutParams = parms
 
             Picasso.with(context).load(cloth.image1).placeholder(R.drawable.ic_account_box_black_24dp).into(clothImage)
         }

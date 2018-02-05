@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ladrope.app.Adapters.ShopClothAdapter
 import com.ladrope.app.Model.Cloth
 import com.ladrope.app.R
+import com.ladrope.app.Utilities.GENDER
 
 
 /**
@@ -37,7 +38,7 @@ class ShopFragment : Fragment() {
         val uid = FirebaseAuth.getInstance().uid
 
         val database = FirebaseDatabase.getInstance()
-        val query = database.getReference("cloths").child("male")
+        val query = database.getReference("cloths").child(GENDER)
 
 
         options = FirebaseRecyclerOptions.Builder<Cloth>()

@@ -11,6 +11,8 @@ import com.ladrope.app.R
 import kotlinx.android.synthetic.main.activity_home.*
 
 
+
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -20,10 +22,12 @@ class Home : AppCompatActivity() {
     private var viewPager: ViewPager? = null
     private var mFragmentList = arrayListOf<Fragment>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_home)
+
         supportActionBar?.hide()
 
         viewPager = view_pager

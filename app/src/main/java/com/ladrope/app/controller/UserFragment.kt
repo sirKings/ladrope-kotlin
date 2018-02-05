@@ -52,7 +52,7 @@ class UserFragment : Fragment() {
                 var couponText = ""
 
                 if (mUser?.coupons == null){
-                    couponText = "0"
+                    couponText = "Coupons: 0"
                 }else{
                     couponText = "Coupons: "+ mUser?.coupons.toString()
                 }
