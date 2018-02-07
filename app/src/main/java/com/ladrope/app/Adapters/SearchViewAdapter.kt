@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ladrope.app.Model.Cloth
 import com.ladrope.app.R
+import com.ladrope.app.Utilities.SELECTEDCLOTH
 import com.ladrope.app.controller.ClothActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.search_row.view.*
@@ -42,8 +43,9 @@ class SearchViewAdapter(private val list: ArrayList<Cloth?>?, private val contex
 
 
             itemView.setOnClickListener {
+                SELECTEDCLOTH = cloth
                 val clothIntent = Intent(context, ClothActivity::class.java)
-                clothIntent.putExtra("clothKey", cloth.clothKey)
+                context.startActivity(clothIntent)
             }
         }
 

@@ -24,13 +24,18 @@ class Cloth() {
     var tags: String? = null
     var tailorKey: String? = null
     var time: Any? = null
+    var fabricType: String? = null
+    var description: String? = null
+    var options: Any? = null
+    var cartKey: String? = null
 
 
     constructor(name: String?, clothKey: String?, cost: String?, gender: String?, image1: String?,
     image2: String?, image3: String?, image4: String?, label: String?,
                 labelEmail: String?, labelPhone: String?, labelId: String?,
                 likes: Int?, numComment: Int?, numSold: Int?, price: Long?,
-                rating: Double?, tags: String?, tailorKey: String?, time: String?): this(){
+                rating: Double?, tags: String?, fabricType: String, description: String?,
+                tailorKey: String?, time: String?, options: Any?, cartKey: String?): this(){
         this.clothKey = clothKey
         this.cost = cost
         this.gender = gender
@@ -39,6 +44,7 @@ class Cloth() {
         this.image3 = image3
         this.image4 = image4
         this.label = label
+        this.description = description
         this.labelEmail = labelEmail
         this.labelId = labelId
         this.labelPhone = labelPhone
@@ -51,5 +57,9 @@ class Cloth() {
         this.tailorKey = tailorKey
         this.time = time
         this.name = name
+        this.fabricType = fabricType
+        this.options = options
+        this.cartKey = cartKey
+
     }
 }

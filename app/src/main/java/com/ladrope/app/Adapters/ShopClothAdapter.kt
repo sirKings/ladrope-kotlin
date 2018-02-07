@@ -1,10 +1,12 @@
 package com.ladrope.app.Adapters
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
@@ -12,6 +14,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.ladrope.app.Model.Cloth
 import com.ladrope.app.R
+import com.ladrope.app.Utilities.SELECTEDCLOTH
+import com.ladrope.app.controller.ClothActivity
 import com.squareup.picasso.Picasso
 
 
@@ -40,6 +44,7 @@ class ShopClothAdapter(options: FirebaseRecyclerOptions<Cloth>, private val cont
             val numSold = itemView.findViewById<TextView>(R.id.ShopNumSold)
             val rating = itemView.findViewById<RatingBar>(R.id.shopRatingBar)
             val clothImage = itemView.findViewById<ImageView>(R.id.shopClothImage)
+            val moreBtn = itemView.findViewById<Button>(R.id.shopSeeMoreBtn)
 
             clothName.text = cloth.name
             labelName.text = cloth.label
@@ -50,6 +55,12 @@ class ShopClothAdapter(options: FirebaseRecyclerOptions<Cloth>, private val cont
 
 
             Picasso.with(context).load(cloth.image1).placeholder(R.drawable.ic_account_box_black_24dp).into(clothImage)
+
+            moreBtn.setOnClickListener {
+                SELECTEDCLOTH = cloth
+                val clothIntent = Intent(context, ClothActivity::class.java)
+                context.startActivity(clothIntent)
+            }
         }
     }
 }

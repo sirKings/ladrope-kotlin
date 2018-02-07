@@ -41,7 +41,9 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.0.2'
     implementation 'com.firebaseui:firebase-ui-database:3.2.1'
     implementation 'com.dubsmash.volley:library:2.0.1'
+    implementation 'co.paystack.android:paystack:3.0.9'
 }
+
 
 
 
