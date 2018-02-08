@@ -12,10 +12,14 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.ladrope.app.Model.PendingOrder
 import com.ladrope.app.Model.User
 import com.ladrope.app.R
+import com.ladrope.app.Utilities.SubmitOrdersTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_edit_user.*
+import java.util.ArrayList
+import kotlin.collections.HashMap
 
 class EditUser : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -117,6 +121,7 @@ class EditUser : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             .addOnCompleteListener { task: Task<Void> ->
                                 if (task.isSuccessful) {
                                     Toast.makeText(this,"Updates saved", Toast.LENGTH_SHORT).show()
+                                    checkSavedOrder()
                                 } else {
 
                                 }
@@ -129,6 +134,30 @@ class EditUser : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         }else{
             Toast.makeText(this,"Please enter an address", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun checkSavedOrder(){
+        val pendingOrders = ArrayList<PendingOrder>()
+        if (mUser?.size != null){
+            val savedOrderRef = FirebaseDatabase.getInstance().reference.child("users").child(mAuth.uid).child("savedOrders")
+            savedOrderRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError?) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot?) {
+                    if (p0?.value != null){
+                        for(data in p0.children){
+                            val pendingOrder = data.getValue(PendingOrder::class.java)
+                            pendingOrders.add(pendingOrder!!)
+                        }
+
+                        SubmitOrdersTask(pendingOrders, this@EditUser).execute()
+                    }
+                }
+
+            })
         }
     }
 

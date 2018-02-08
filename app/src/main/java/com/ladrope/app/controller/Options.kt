@@ -237,7 +237,7 @@ class Options : AppCompatActivity() {
         val cloths = ArrayList<Cloth>()
         cloth.selectedOption = adapter?.selectedOptions
         cloths.add(cloth)
-        PlaceOrdersTask(cloths, mUser!!, ref).execute()
+        PlaceOrdersTask(cloths, mUser!!, ref, this).execute()
     }
 
 }

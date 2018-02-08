@@ -1,9 +1,9 @@
 package com.ladrope.app.Utilities
 
+import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import android.widget.Toast
-import co.paystack.android.PaystackSdk.applicationContext
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
@@ -21,7 +21,7 @@ import java.util.*
 /**
  * Created by USER on 2/8/18.
  */
-class PlaceOrdersTask internal constructor(private val cloths: ArrayList<Cloth>, private val user: User, private val ref: String) : AsyncTask<Void, Void, Boolean>() {
+class PlaceOrdersTask internal constructor(private val cloths: ArrayList<Cloth>, private val user: User, private val ref: String, private val context: Context) : AsyncTask<Void, Void, Boolean>() {
 
     override fun doInBackground(vararg params: Void): Boolean? {
 
@@ -42,9 +42,9 @@ class PlaceOrdersTask internal constructor(private val cloths: ArrayList<Cloth>,
     override fun onPostExecute(success: Boolean?) {
 
         if (success!!) {
-            Toast.makeText(applicationContext, "Your order has been submitted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Your order has been submitted", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(applicationContext, "Order submission failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Order submission failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -91,8 +91,8 @@ class PlaceOrdersTask internal constructor(private val cloths: ArrayList<Cloth>,
             tailorOrderRef.child(tailorOrderKey).setValue(order).addOnCompleteListener {
 
                 userOrderRef.child(userOrderKey).setValue(order).addOnCompleteListener {
-                    CallTailorTask(cloth.labelPhone!!).execute()
-                    Toast.makeText(applicationContext,"Your order has been submitted", Toast.LENGTH_LONG).show()
+                    CallTailorTask(cloth.labelPhone!!, context).execute()
+                    Toast.makeText(context,"Your order has been submitted", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -125,16 +125,16 @@ class PlaceOrdersTask internal constructor(private val cloths: ArrayList<Cloth>,
         order.name = cloth.name
 
         userOrderRef.child(userOrderKey).setValue(order).addOnCompleteListener {
-            Toast.makeText(applicationContext, "Your order has been saved, Take your measurement video and we will start working on it", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Your order has been saved, Take your measurement video and we will start working on it", Toast.LENGTH_LONG).show()
         }
     }
 
 }
 
-private class CallTailorTask constructor(private val num: String) : AsyncTask<String?, String?, String?>() {
+private class CallTailorTask constructor(private val num: String, private val context: Context) : AsyncTask<String?, String?, String?>() {
     override fun doInBackground(vararg str: String?): String? {
 
-        val queue = Volley.newRequestQueue(applicationContext)
+        val queue = Volley.newRequestQueue(context)
 
         var phoneNumber = ""
         if (num.length == 11) {
@@ -164,7 +164,7 @@ private class CallTailorTask constructor(private val num: String) : AsyncTask<St
 }
 
 
-class SubmitOrdersTask internal constructor(private val cloths: ArrayList<PendingOrder>) : AsyncTask<Void, Void, Boolean>() {
+class SubmitOrdersTask internal constructor(private val cloths: ArrayList<PendingOrder>, private val context: Context) : AsyncTask<Void, Void, Boolean>() {
 
     override fun doInBackground(vararg params: Void): Boolean? {
 
@@ -178,9 +178,9 @@ class SubmitOrdersTask internal constructor(private val cloths: ArrayList<Pendin
     override fun onPostExecute(success: Boolean?) {
 
         if (success!!) {
-            Toast.makeText(applicationContext, "Your order has been submitted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Your order has been submitted", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(applicationContext, "Order submission failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Order submission failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -228,9 +228,9 @@ class SubmitOrdersTask internal constructor(private val cloths: ArrayList<Pendin
             tailorOrderRef.child(tailorOrderKey).setValue(order).addOnCompleteListener {
 
                 userOrderRef.child(userOrderKey).setValue(order).addOnCompleteListener {
-                    CallTailorTask(pendingOrder.labelPhone!!).execute()
+                    CallTailorTask(pendingOrder.labelPhone!!, context).execute()
                     FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid).child("savedOrders").child(savedOrderKey).setValue(null)
-                    Toast.makeText(applicationContext,"Your order has been submitted", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"Your order has been submitted", Toast.LENGTH_LONG).show()
                 }
             }
         }
