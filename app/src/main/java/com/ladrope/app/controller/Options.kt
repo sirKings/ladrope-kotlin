@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
@@ -27,8 +28,10 @@ import com.google.firebase.database.ValueEventListener
 import com.ladrope.app.Adapters.OptionsAdapter
 import com.ladrope.app.Model.Cloth
 import com.ladrope.app.Model.Option
+import com.ladrope.app.Model.User
 import com.ladrope.app.R
 import com.ladrope.app.Utilities.GENDER
+import com.ladrope.app.Utilities.PlaceOrdersTask
 import com.ladrope.app.Utilities.SELECTEDCLOTH
 import com.ladrope.app.Utilities.VERIFY_PAYMENT_URL
 import kotlinx.android.synthetic.main.activity_options.*
@@ -43,10 +46,13 @@ class Options : AppCompatActivity() {
     var infoText: TextView? = null
     var queue: RequestQueue? = null
     var alertDialog: AlertDialog? = null
+    var mUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_options)
+
+        getUser()
 
         cloth = SELECTEDCLOTH
         options = ArrayList()
@@ -88,7 +94,7 @@ class Options : AppCompatActivity() {
     }
 
     fun OptionAddToCart(view: View){
-        cloth?.options = adapter?.selectedOptions
+        cloth?.selectedOption = adapter?.selectedOptions
         val dataRef = FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid).child("cart")
 
         val cartKey = dataRef.push().key
@@ -139,6 +145,7 @@ class Options : AppCompatActivity() {
                     if (card.isValid) {
                         // charge card
                         chargeCard(card)
+                        //placeOrder(cloth!!, "fake string")
                     } else {
                         //do something
                         Toast.makeText(applicationContext, "Please enter valid card details", Toast.LENGTH_SHORT).show()
@@ -190,6 +197,7 @@ class Options : AppCompatActivity() {
                 infoText?.text = "Payment Successful"
                 infoText?.visibility = View.VISIBLE
                 setDailogButtons()
+                placeOrder(cloth!!, ref)
             }
         }, Response.ErrorListener { e ->
             // Your error code here
@@ -210,5 +218,26 @@ class Options : AppCompatActivity() {
     }
 
 
+     fun getUser() {
+            val userRef = FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid)
+            userRef.addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onCancelled(p0: DatabaseError?) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot?) {
+                    mUser = p0?.getValue(User::class.java)
+                    Log.e("User", mUser?.email)
+                }
+
+            })
+    }
+
+    fun placeOrder(cloth: Cloth, ref: String){
+        val cloths = ArrayList<Cloth>()
+        cloth.selectedOption = adapter?.selectedOptions
+        cloths.add(cloth)
+        PlaceOrdersTask(cloths, mUser!!, ref).execute()
+    }
 
 }

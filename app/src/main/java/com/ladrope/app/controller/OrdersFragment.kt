@@ -122,8 +122,8 @@ class OrdersFragment : Fragment() {
 
                 orderName.text = order.name
                 status.text = order.status
-                startDate.text = formatDate(order.startDate.toString())
-                deliveryDate.text = formatDate(order.date.toString())
+                startDate.text = formatDate(order.startDate!!)
+                deliveryDate.text = formatDate(order.date!!)
 
                 Picasso.with(context).load(order.image1).placeholder(R.drawable.ic_account_box_black_24dp).into(orderImage)
 

@@ -12,8 +12,9 @@ class User() {
     var gender: String? = null
     var height: Any? = null
     var phone: String? = null
+    var size: Any? = null
 
-    constructor(displayName: String?, email: String?, photoURL: String?, address: String?, coupons: Int?, gender: String?, height: Any?, phone: String?): this(){
+    constructor(displayName: String?, email: String?, photoURL: String?, address: String?, coupons: Int?, gender: String?, height: Any?, phone: String?, size: Any?): this(){
         this.email = email
         this.displayName = displayName
         this.photoURL = photoURL
@@ -22,5 +23,6 @@ class User() {
         this.gender = gender
         this.height = height
         this.phone = phone
+        this.size = size
     }
 }

@@ -61,10 +61,14 @@ class EditUser : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 mUser = p0?.getValue(User::class.java)
+                var heightText = ""
 
-                val height = mUser?.height as HashMap<String, String>
-                val heightText = height.get("height")
-                val unit = height.get("unit")
+                if(mUser?.height != null){
+                    val height = mUser?.height as HashMap<String, String>
+                    heightText = height.get("height")!!
+                    val unit = height.get("unit")
+                }
+
 
 
                 userAddress.setText(mUser?.address)

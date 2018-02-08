@@ -157,7 +157,7 @@ class Login : AppCompatActivity() {
                         println("signInWithCredential:success")
                         startLogin(true)
                         val currentUser = mAuth?.currentUser
-                        val newUser = User(currentUser?.displayName, currentUser?.email, currentUser?.photoUrl.toString(), null,null,null,null,null)
+                        val newUser = User(currentUser?.displayName, currentUser?.email, currentUser?.photoUrl.toString(), null,null,null,null,null,null)
                         createUser(newUser,currentUser?.uid)
                         goHome()
                     } else {

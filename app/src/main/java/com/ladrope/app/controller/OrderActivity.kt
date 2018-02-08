@@ -62,8 +62,8 @@ class OrderActivity : AppCompatActivity() {
                 activityOrderName.text = order?.name
                 activityOrderPrice.text = "NGN"+order?.price!!.toString() +".00"
                 activityOrderStatus.text = order?.status
-                activityOrderDeliveryDate.text = formatDate(order?.date.toString())
-                activityOrderStartDate.text = formatDate(order?.startDate.toString())
+                activityOrderDeliveryDate.text = formatDate(order?.date!!)
+                activityOrderStartDate.text = formatDate(order?.startDate!!)
 
                 Picasso.with(this@OrderActivity).load(order?.image1).placeholder(R.drawable.ic_account_box_black_24dp).into(orderActivityImage)
             }
@@ -201,7 +201,6 @@ class OrderActivity : AppCompatActivity() {
     fun updateOrders(){
 
         order?.status = "Completed"
-        Log.e("Async", "updating orders")
 
 
         val userRef = FirebaseDatabase.getInstance().reference.child("users").child(uid).child("completedorders").push().setValue(order).addOnCompleteListener {

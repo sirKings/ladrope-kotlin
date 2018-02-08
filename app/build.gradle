@@ -21,6 +21,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -42,6 +43,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-database:3.2.1'
     implementation 'com.dubsmash.volley:library:2.0.1'
     implementation 'co.paystack.android:paystack:3.0.9'
+
 }
 
 
