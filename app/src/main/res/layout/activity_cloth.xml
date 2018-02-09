@@ -6,13 +6,19 @@
     android:layout_height="match_parent"
     tools:context="com.ladrope.app.controller.ClothActivity">
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/clothStory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_margin="10dp"
         android:elevation="@dimen/cardview_default_elevation"
+        tools:layout_editor_absoluteX="10dp"
         tools:targetApi="lollipop">
 
         <ScrollView
@@ -22,7 +28,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
@@ -41,10 +47,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="@id/clothClothImage"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent">
-                    </LinearLayout>
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"/>
 
 
                     <Button
@@ -84,7 +90,7 @@
                         android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" >
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </android.support.v4.view.ViewPager>
 
@@ -102,11 +108,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="68dp"
+                        android:layout_marginLeft="68dp"
                         android:layout_marginTop="12dp"
                         app:layout_constraintStart_toStartOf="@+id/clothDescription"
                         app:layout_constraintTop_toBottomOf="@+id/clothFabricType"
                         tools:text="Cashmeire" />
-
 
 
                     <android.support.constraint.ConstraintLayout
@@ -120,6 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
                             android:layout_marginTop="8dp"
                             android:background="@color/colorPrimaryDark"
                             android:paddingLeft="20dp"
@@ -136,6 +143,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
                             android:layout_marginTop="8dp"
                             android:lines="1"
                             android:maxWidth="150dp"
@@ -150,6 +158,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
                             android:maxWidth="150dp"
                             app:layout_constraintBottom_toBottomOf="@+id/clothRatingBar"
                             app:layout_constraintStart_toStartOf="parent"
@@ -162,6 +171,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
                             android:isIndicator="true"
                             android:numStars="5"
                             android:stepSize="0.1"
@@ -173,6 +183,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
                             app:layout_constraintBottom_toBottomOf="@+id/clothLabelName"
                             app:layout_constraintEnd_toStartOf="@+id/clothRatingBar"
                             tools:text="(20)" />
@@ -183,7 +194,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
                         android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -192,32 +205,101 @@
                         app:layout_constraintTop_toBottomOf="@id/clothInfo"
                         app:layout_constraintVertical_bias="0.099">
 
-                        <ImageButton
-                            android:id="@+id/clothCommentBtn"
+                        <LinearLayout
+                            android:id="@+id/clothLikeLayout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_comment_black_24dp" />
+                            android:background="@color/common_google_signin_btn_text_dark_disabled"
+                            android:clickable="true"
+                            android:gravity="center_horizontal|center"
+                            android:onClick="like"
+                            android:orientation="horizontal"
+                            android:padding="4dp">
 
-                        <ImageButton
-                            android:id="@+id/clothLikeBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/ic_favorite_black_24dp" />
+                            <TextView
+                                android:id="@+id/clothNumLikes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:onClick="like"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                tools:text="200" />
 
-                        <ImageButton
-                            android:id="@+id/clothShareBtn"
+                            <ImageButton
+                                android:id="@+id/clothLikeOutLineBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:onClick="like"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+
+                            <ImageButton
+                                android:id="@+id/clothLikeFilledBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:onClick="like"
+                                app:srcCompat="@drawable/ic_favorite_black_24dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/clothCommentLayout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            app:srcCompat="?attr/actionModeShareDrawable" />
+                            android:background="@color/common_google_signin_btn_text_dark_disabled"
+                            android:clickable="true"
+                            android:gravity="center_horizontal|center"
+                            android:onClick="comment"
+                            android:orientation="horizontal"
+                            android:padding="4dp">
+
+                            <TextView
+                                android:id="@+id/clothNumComment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:onClick="comment"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                tools:text="200" />
+
+                            <ImageButton
+                                android:id="@+id/clothCommentBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:onClick="comment"
+                                app:srcCompat="@drawable/ic_comment_black_24dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/clothShareLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/common_google_signin_btn_text_dark_disabled"
+                            android:clickable="true"
+                            android:gravity="center_horizontal|center"
+                            android:onClick="share"
+                            android:orientation="horizontal"
+                            android:padding="4dp">
+
+                            <ImageButton
+                                android:id="@+id/clothShareBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:onClick="share"
+                                app:srcCompat="@drawable/ic_share_black_24dp" />
+
+                        </LinearLayout>
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/textView17"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="Description: "
@@ -230,6 +312,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="8dp"
                         android:text="Production Time: "
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -241,6 +324,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="8dp"
                         android:text="Fabric Type: "
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -251,5 +335,30 @@
         </ScrollView>
 
     </android.support.v7.widget.CardView>
+
+    <ProgressBar
+        android:id="@+id/clothProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:elevation="1000dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/clothErrorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:text="Opps!! Could not connect to internet. Please check your internet connection"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

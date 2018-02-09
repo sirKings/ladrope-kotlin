@@ -104,6 +104,7 @@
             android:id="@+id/actionBtns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -111,32 +112,91 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clothInfo">
 
-            <ImageButton
-                android:id="@+id/shopCommentBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_comment_black_24dp" />
 
-            <ImageButton
-                android:id="@+id/shopLikeBtn"
+            <LinearLayout
+                android:id="@+id/shopLikeLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/ic_favorite_black_24dp" />
+                android:clickable="true"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal"
+                android:padding="4dp">
 
-            <ImageButton
-                android:id="@+id/shopShareBtn"
+                <TextView
+                    android:id="@+id/shopNumLikes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    tools:text="200" />
+
+                <ImageButton
+                    android:id="@+id/shopLikeOutLineBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+
+                <ImageButton
+                    android:id="@+id/shopLikeFilledBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_favorite_black_24dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shopCommentLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="?attr/actionModeShareDrawable" />
+                android:clickable="true"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/shopNumComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    tools:text="200" />
+
+                <ImageButton
+                    android:id="@+id/shopCommentBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_comment_black_24dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shopShareLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <ImageButton
+                    android:id="@+id/shopShareBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_share_black_24dp" />
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/shopSeeMoreBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@android:color/transparent"
                 android:text="more" />
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>

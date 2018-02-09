@@ -4,9 +4,11 @@ package com.ladrope.app.controller
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,6 +26,8 @@ import kotlinx.android.synthetic.main.fragment_user.view.*
 class UserFragment : Fragment() {
 
     private var mUser: User? = null
+    private var mErrorText: TextView? = null
+    private var mUserStory: CardView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -39,12 +43,16 @@ class UserFragment : Fragment() {
         val userPhone = view.userTabPhone
         val userHieght = view.userTabHieght
         val coupon = view.userTabUserCoupon
+        mErrorText = view.userErrorText
+        mUserStory = view.userStory
 
 
 
         userDataRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError?) {
 
+                mErrorText?.visibility = View.VISIBLE
+                mUserStory?.visibility = View.GONE
             }
 
             override fun onDataChange(p0: DataSnapshot?) {

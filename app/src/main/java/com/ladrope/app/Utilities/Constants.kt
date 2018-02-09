@@ -11,3 +11,5 @@ val DECLINE_ORDER_URL = "https://ladrope.com/decline"
 val GENDER = "male"
 var SELECTEDCLOTH: Cloth? = null
 val VERIFY_PAYMENT_URL = "https://ladrope.com/verify"
+val COMMENT_REPORT_URL = "https://ladrope.com/comment"
+val ADMIN_CHANNEL_ID = "Ladrope"

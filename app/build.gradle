@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.0.2'
     implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation 'com.android.support:support-annotations:27.0.2'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
@@ -43,14 +44,9 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-database:3.2.1'
     implementation 'com.dubsmash.volley:library:2.0.1'
     implementation 'co.paystack.android:paystack:3.0.9'
+    implementation 'com.android.support:customtabs:27.0.2'
 
 }
-
-
-
-
-
-
 
 
 

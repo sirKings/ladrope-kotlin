@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.SearchView
+import android.widget.TextView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -31,6 +32,7 @@ class SearchFragment : Fragment() {
     var clothAdapter: SearchViewAdapter? = null
     var progressBar : ProgressBar? = null
     var mainClothList =  ArrayList<Cloth?>()
+    var mErrorText: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -38,6 +40,7 @@ class SearchFragment : Fragment() {
 
         progressBar = view.searchProgressBar
         progressBar?.visibility = View.VISIBLE
+        mErrorText = view.searchErrorText
 
         searchView = view.findViewById(R.id.searchView)
 
@@ -85,7 +88,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onCancelled(p0: DatabaseError?) {
-
+                    mErrorText?.visibility = View.VISIBLE
             }
         })
     }

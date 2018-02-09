@@ -29,14 +29,16 @@ class Cloth() {
     var options: Any? = null
     var cartKey: String? = null
     var selectedOption: Any? = null
+    var liked: Boolean = false
+    var likers: HashMap<String, Boolean>? = null
 
 
     constructor(name: String?, clothKey: String?, cost: String?, gender: String?, image1: String?,
-    image2: String?, image3: String?, image4: String?, label: String?,
+    image2: String?, image3: String?, image4: String?, label: String?, likers: HashMap<String, Boolean>,
                 labelEmail: String?, labelPhone: String?, labelId: String?,
                 likes: Int?, numComment: Int?, numSold: Int?, price: Long?,
                 rating: Double?, tags: String?, fabricType: String, description: String?,
-                tailorKey: String?, time: Any?, options: Any?, cartKey: String?, selectedOption: Any): this(){
+                tailorKey: String?, time: Any?, options: Any?, cartKey: String?, liked: Boolean, selectedOption: Any): this(){
         this.clothKey = clothKey
         this.cost = cost
         this.gender = gender
@@ -62,6 +64,8 @@ class Cloth() {
         this.options = options
         this.cartKey = cartKey
         this.selectedOption = selectedOption
+        this.liked = liked
+        this.likers = likers
 
     }
 }

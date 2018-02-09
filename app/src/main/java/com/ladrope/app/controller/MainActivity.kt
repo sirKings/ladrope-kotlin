@@ -9,6 +9,8 @@ import com.ladrope.app.R
 
 class MainActivity : AppCompatActivity() {
 
+    var clothKey: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -16,10 +18,24 @@ class MainActivity : AppCompatActivity() {
 
         val mAuth = FirebaseAuth.getInstance()
 
+        try{
+            clothKey = intent.extras.get("clothKey") as String
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+
         if (mAuth.currentUser?.uid != null){
-            val homeIntent = Intent(this, Home::class.java)
-            startActivity(homeIntent)
-            finish()
+
+            if (clothKey != null){
+                val clothIntent = Intent(this, ClothActivity::class.java)
+                clothIntent.putExtra("clothKey", clothKey)
+                startActivity(clothIntent)
+            }else{
+                val homeIntent = Intent(this, Home::class.java)
+                startActivity(homeIntent)
+                finish()
+            }
+
         }
     }
 
