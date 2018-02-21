@@ -45,8 +45,11 @@ dependencies {
     implementation 'com.dubsmash.volley:library:2.0.1'
     implementation 'co.paystack.android:paystack:3.0.9'
     implementation 'com.android.support:customtabs:27.0.2'
+    compile 'com.cloudinary:cloudinary-android:1.20.0'
 
 }
+
+
 
 
 

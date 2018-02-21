@@ -1,16 +1,12 @@
 package com.ladrope.app.controller
 
-
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +14,8 @@ import android.widget.*
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.ladrope.app.Model.Cloth
 import com.ladrope.app.R
 import com.ladrope.app.Service.getLocalBitmapUri
@@ -26,127 +23,48 @@ import com.ladrope.app.Service.updateCoupon
 import com.ladrope.app.Utilities.GENDER
 import com.ladrope.app.Utilities.SHARE_INTENT_CODE
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.filter.view.*
-import kotlinx.android.synthetic.main.fragment_shop.view.*
+import kotlinx.android.synthetic.main.activity_tailor.*
 
+class Tailor : AppCompatActivity() {
 
-/**
- * A simple [Fragment] subclass.
- */
-class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
-
-
-    var adapter: ShopClothAdapter? = null
+    var adapter: TailorClothAdapter? = null
     var layoutManager: RecyclerView.LayoutManager? = null
     var options: FirebaseRecyclerOptions<Cloth>? = null
-    var shopRV: RecyclerView? = null
     var mProgressBar: ProgressBar? =null
     var mErrorText: TextView? = null
-    var mCartItem:  TextView? = null
-    var alertDialog: AlertDialog? = null
     var uid: String? = null
-    var swipeRefreshLayout: SwipeRefreshLayout? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_tailor)
 
-        val view = inflater.inflate(R.layout.fragment_shop, container, false)
-
-        mProgressBar = view.findViewById(R.id.shopProgressBar)
-        mErrorText = view.findViewById(R.id.shopErrorText)
-        shopRV = view.findViewById(R.id.shopRecyclerView)
-
-        view.shopFilterBtn.setColorFilter(resources.getColor(R.color.cardview_light_background))
-
+        val labelId = intent.extras.get("labelId") as String
 
         uid = FirebaseAuth.getInstance().uid
 
-        getCartItems(uid)
-
-        val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("date")
-        setup(query)
-
-        mCartItem = view.shopCartNo
-
-        view.shopCartNo.setOnClickListener {
-            openCart()
-        }
-
-        view.shopCartBtn.setOnClickListener {
-            openCart()
-        }
-
-        view.shopCartLayout.setOnClickListener {
-            openCart()
-        }
-
-        view.shopFilterBtn.setOnClickListener {
-            openFilter()
-        }
-
-        swipeRefreshLayout = view.swipe_container
-        swipeRefreshLayout?.setOnRefreshListener(this)
-        swipeRefreshLayout?.setColorSchemeResources(R.color.colorPrimary,
-                android.R.color.holo_green_dark,
-                android.R.color.holo_orange_dark,
-                android.R.color.holo_blue_dark)
-
-
-        return view
-    }
-
-    fun setup(query: Query){
+        val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("labelId").equalTo(labelId)
 
         options = FirebaseRecyclerOptions.Builder<Cloth>()
                 .setQuery(query, Cloth::class.java)
                 .build()
-        adapter = ShopClothAdapter(options!!, context!!, uid!!)
-        layoutManager = LinearLayoutManager(context)
+        adapter = TailorClothAdapter(options!!, this, uid!!)
+        layoutManager = LinearLayoutManager(this)
+
+        mProgressBar = tailorProgressBar
+        mErrorText = tailorErrorText
 
         //set up recycler view
-        shopRV!!.layoutManager = layoutManager
-        shopRV!!.adapter = adapter
-
+        tailorRecyclerView!!.layoutManager = layoutManager
+        tailorRecyclerView!!.adapter = adapter
     }
 
-    override fun onStart() {
-        super.onStart()
-        adapter?.startListening()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        adapter?.stopListening()
-    }
-
-    fun shareDesign(cloth: Cloth, context: Context){
-        val text = "https://ladrope.com/cloth/${cloth.clothKey}"
-        val pictureUri = getLocalBitmapUri(cloth.image1!!, context)
-        val shareIntent = Intent()
-        shareIntent.setAction(Intent.ACTION_SEND)
-        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
-        shareIntent.putExtra(Intent.EXTRA_STREAM, pictureUri)
-        shareIntent.setPackage("com.whatsapp")
-        shareIntent.type = "image/*"
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivityForResult(Intent.createChooser(shareIntent, "Share design"), SHARE_INTENT_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == SHARE_INTENT_CODE){
-            Toast.makeText(context, "You have earned one 5% discount coupon", Toast.LENGTH_LONG).show()
-            updateCoupon()
-        }
-    }
-
-    inner class ShopClothAdapter(options: FirebaseRecyclerOptions<Cloth>, private val context: Context, private val uid: String): FirebaseRecyclerAdapter<Cloth, ShopClothAdapter.ViewHolder>(options){
+    inner class TailorClothAdapter(options: FirebaseRecyclerOptions<Cloth>, private val context: Context, private val uid: String): FirebaseRecyclerAdapter<Cloth, TailorClothAdapter.ViewHolder>(options){
         var likeFilled: ImageButton? = null
         var likeOutLine: ImageButton? = null
 
         override fun onDataChanged() {
             super.onDataChanged()
             mProgressBar?.visibility = View.GONE
-            swipeRefreshLayout?.isRefreshing = false
         }
 
         override fun onError(error: DatabaseError) {
@@ -180,9 +98,9 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 likeFilled = itemView.findViewById(R.id.shopLikeFilledBtn)
                 likeOutLine = itemView.findViewById(R.id.shopLikeOutLineBtn)
                 val commentIcon = itemView.findViewById<ImageButton>(R.id.shopCommentBtn)
-                    commentIcon.setColorFilter(resources.getColor(R.color.colorPrimary))
+                commentIcon.setColorFilter(resources.getColor(R.color.colorPrimary))
                 val shareIcon = itemView.findViewById<ImageButton>(R.id.shopShareBtn)
-                    shareIcon.setColorFilter(resources.getColor(R.color.colorPrimary))
+                shareIcon.setColorFilter(resources.getColor(R.color.colorPrimary))
 
                 cloth.liked = getLikeStatus(cloth, uid)
 
@@ -222,12 +140,6 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         likeCloth(cloth, uid, true)
                     }
 
-                }
-
-                labelName.setOnClickListener {
-                    val tailorIntent = Intent(context, Tailor::class.java)
-                    tailorIntent.putExtra("labelId", cloth.labelId)
-                    startActivity(tailorIntent)
                 }
 
                 numLikes.setOnClickListener {
@@ -327,98 +239,34 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    fun getCartItems(uid: String?){
-        val cartRef = FirebaseDatabase.getInstance().reference.child("users").child(uid).child("cart")
-            cartRef.addValueEventListener(object: ValueEventListener{
-                override fun onDataChange(p0: DataSnapshot?) {
-                    if (p0!!.exists()){
-                        var numItems = 0
-                        for (cloth in p0.children){
-                            numItems++
-                            mCartItem?.text = numItems.toString()
-                        }
-                    }else{
-                        mCartItem?.text = "0"
-                    }
-                }
-
-                override fun onCancelled(p0: DatabaseError?) {
-                    mCartItem?.text = "0"
-                }
-            })
+    fun shareDesign(cloth: Cloth, context: Context){
+        val text = "https://ladrope.com/cloth/${cloth.clothKey}"
+        val pictureUri = getLocalBitmapUri(cloth.image1!!, context)
+        val shareIntent = Intent()
+        shareIntent.setAction(Intent.ACTION_SEND)
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
+        shareIntent.putExtra(Intent.EXTRA_STREAM, pictureUri)
+        shareIntent.setPackage("com.whatsapp")
+        shareIntent.type = "image/*"
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivityForResult(Intent.createChooser(shareIntent, "Share design"), SHARE_INTENT_CODE)
     }
 
-    fun openCart(){
-        if (mCartItem?.text == "0"){
-            Toast.makeText(context, "Your cart is empty", Toast.LENGTH_SHORT).show()
-        }else{
-            val cartIntent = Intent(context, Cart::class.java)
-            Log.e("Cart", "clicked")
-            startActivity(cartIntent)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == SHARE_INTENT_CODE){
+            Toast.makeText(this, "You have earned one 5% discount coupon", Toast.LENGTH_LONG).show()
+            updateCoupon()
         }
     }
 
-    fun openFilter(){
-        val layoutInflater = LayoutInflater.from(context)
-        val view = layoutInflater.inflate(R.layout.filter, null)
-        alertDialog = AlertDialog.Builder(context!!).create()
-
-        val classList = arrayOf("Filter by type","Casual wears", "Corporate wears", "Traditional wears", "Shirts", "Trousers", "Gown", "Wedding Outfits", "Suits", "Ankara")
-        //val priceList = arrayOf("Filter by price","Less than NGN5000", "Less than NGN50000", "Less than NGN100000")
-
-        val classAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, classList)
-        //val priceAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, priceList)
-
-        view.filterClassSpinner.adapter = classAdapter
-        //view.filterPriceSpinner.adapter = priceAdapter
-        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        //priceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        alertDialog?.setButton(AlertDialog.BUTTON_POSITIVE, "Ok") { dialog, which ->
-
-        }
-        alertDialog?.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { dialog, which -> dialog.dismiss() }
-
-        alertDialog?.setView(view)
-        alertDialog?.show()
-
-        val b = alertDialog?.getButton(AlertDialog.BUTTON_POSITIVE)
-        b?.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                val clas = view.filterClassSpinner.selectedItem as String
-                //val price = view.filterPriceSpinner.selectedItem as String
-
-                var filterClass: String? = ""
-                //var filterPrice: String? = ""
-
-                when (clas){
-                    "Filter by type" -> filterClass = null
-                    "Casual wears" -> filterClass = "casuals"
-                    "Corporate wears" -> filterClass = "corporate"
-                    "Traditional wears" -> filterClass = "native"
-                    "Shirts" -> filterClass = "shirt"
-                    "Gown" -> filterClass = "gown"
-                    "Trousers" -> filterClass = "trousers"
-                    "Wedding Outfits" -> filterClass = "wedding"
-                    "Ankara" -> filterClass = "ankara"
-                    "Suits" -> filterClass = "suit"
-                }
-
-                if (filterClass != null){
-                    val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("tags").equalTo(filterClass)
-                    mProgressBar?.visibility = View.VISIBLE
-                    setup(query)
-                    adapter?.startListening()
-                }
-                alertDialog?.dismiss()
-            }
-        })
-    }
-
-    override fun onRefresh() {
-        val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("date")
-        setup(query)
+    override fun onStart() {
+        super.onStart()
         adapter?.startListening()
     }
 
-}// Required empty public constructor
+    override fun onStop() {
+        super.onStop()
+        adapter?.stopListening()
+    }
+}

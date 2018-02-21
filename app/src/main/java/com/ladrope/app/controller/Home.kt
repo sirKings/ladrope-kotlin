@@ -40,7 +40,7 @@ class Home : AppCompatActivity() {
         adapter.addFragment(ChatFragment())
 
         viewPager?.adapter = adapter
-        viewPager?.offscreenPageLimit = 5
+        //viewPager?.offscreenPageLimit = 5
 
         tabs.setupWithViewPager(viewPager)
 

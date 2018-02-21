@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
@@ -26,100 +25,92 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.ladrope.app.Adapters.OptionsAdapter
+import com.ladrope.app.Adapters.CartAdapter
 import com.ladrope.app.Model.Cloth
-import com.ladrope.app.Model.Option
 import com.ladrope.app.Model.User
 import com.ladrope.app.R
-import com.ladrope.app.Utilities.GENDER
 import com.ladrope.app.Utilities.PlaceOrdersTask
-import com.ladrope.app.Utilities.SELECTEDCLOTH
 import com.ladrope.app.Utilities.VERIFY_PAYMENT_URL
-import kotlinx.android.synthetic.main.activity_options.*
+import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.paycard.view.*
 
+class Cart : AppCompatActivity() {
 
-class Options : AppCompatActivity() {
-    var cloth: Cloth? = null
-    var options: ArrayList<Option?>? = null
-    var adapter: OptionsAdapter? = null
+    var cartItems: ArrayList<Cloth>? = null
+    var adapter: CartAdapter? = null
     var progressBar: ProgressBar? = null
+    var errorText: TextView? = null
+    var mUser: User? = null
     var infoText: TextView? = null
     var queue: RequestQueue? = null
     var alertDialog: AlertDialog? = null
-    var mUser: User? = null
+    var price: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_options)
+        setContentView(R.layout.activity_cart)
 
-        getUser()
+        cartItems = ArrayList()
+        getCartItems()
 
-        cloth = SELECTEDCLOTH
-        options = ArrayList()
-        getOptions(cloth?.clothKey!!)
-        queue = Volley.newRequestQueue(this)
+        progressBar = cartProgressBar
+        progressBar?.visibility = View.VISIBLE
+
+        errorText = cartErrorText
+
 
         val layoutManager = LinearLayoutManager(this)
-        adapter = OptionsAdapter(options,this)
+        adapter = CartAdapter(cartItems,this)
 
-        optionsRV.layoutManager = layoutManager
-        optionsRV.adapter = adapter
+        cartRecyclerView.layoutManager = layoutManager
+        cartRecyclerView.adapter = adapter
+
+        queue = Volley.newRequestQueue(this)
 
         PaystackSdk.initialize(getApplicationContext())
-
     }
 
-    fun getOptions(clothKey: String){
-        val databaseRef = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).child(clothKey).child("options")
+    fun getCartItems(){
+        val cartRef = FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid).child("cart")
 
-        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-
-            }
-
+        cartRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot?) {
-                if (p0!!.exists()){
-                    for (data in p0.children){
-                        val option = data.getValue(Option::class.java)
-                        options?.add(option)
+                if (p0?.exists()!!){
+                    for (cloth in p0.children){
+                        val item = cloth.getValue(Cloth::class.java)
+                        cartItems?.add(item!!)
                         adapter?.notifyDataSetChanged()
+                        getTotalPrice()
+                        progressBar?.visibility = View.GONE
                     }
-                }else{
-                    optionsCard.visibility = View.GONE
-                    noOptionsCard.visibility = View.VISIBLE
                 }
             }
 
+            override fun onCancelled(p0: DatabaseError?) {
+                errorText?.visibility = View.VISIBLE
+            }
         })
     }
 
-    fun OptionAddToCart(view: View){
-        cloth?.selectedOption = adapter?.selectedOptions
-        val dataRef = FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid).child("cart")
-
-        val cartKey = dataRef.push().key
-        cloth?.cartKey = cartKey
-
-        dataRef.child(cartKey).setValue(cloth).addOnCompleteListener {
-            Toast.makeText(this, "Cloth has been added to your cart", Toast.LENGTH_SHORT).show()
+    fun getTotalPrice(){
+        var total = 0
+        for (cloth in cartItems!!){
+            total += cloth!!.price!!.toInt()
+            getUser(total)
         }
     }
 
-    fun OptionsPlaceOrder(view: View){
+    fun cartPlaceOrder(view: View){
         val layoutInflater = LayoutInflater.from(this)
         val view = layoutInflater.inflate(R.layout.paycard, null)
         alertDialog = AlertDialog.Builder(this).create()
 
         alertDialog?.setCancelable(false)
-        var price: Double? = null
 
         if (mUser?.coupons != null){
-            price = cloth?.price!! * 0.95
-            view.total.text = "NGN"+cloth?.price.toString()+".00"
+            view.total.text = "NGN"+price.toString()+".00"
             view.total.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG)
         }else{
-            price = cloth?.price!!.toDouble()
             view.textVi15.visibility = View.GONE
             view.total.visibility = View.GONE
         }
@@ -172,11 +163,11 @@ class Options : AppCompatActivity() {
 
     }
 
-    fun chargeCard(card: Card, price: Double){
+    fun chargeCard(card: Card, price: Int){
         val charge = Charge()
 
         charge.card = card
-        charge.amount = (price * 100).toInt()
+        charge.amount = (price * 100)
         charge.email = FirebaseAuth.getInstance().currentUser?.email
 
         progressBar?.visibility = View.VISIBLE
@@ -194,14 +185,14 @@ class Options : AppCompatActivity() {
                 infoText?.text = "Payment Failed"
                 infoText?.visibility = View.VISIBLE
                 setDailogButtons()
-                
+
             }
 
         })
 
     }
 
-    fun verifyPayment(ref: String, price: Double){
+    fun verifyPayment(ref: String, price: Int){
         val amount = (price * 100).toString()
         val stringRequest = object : StringRequest(Request.Method.POST, VERIFY_PAYMENT_URL, Response.Listener { s ->
             // Your success code here
@@ -210,14 +201,14 @@ class Options : AppCompatActivity() {
                 infoText?.text = "Payment Successful"
                 infoText?.visibility = View.VISIBLE
                 setDailogButtons()
-                placeOrder(cloth!!, ref)
+                PlaceOrdersTask(cartItems!!, mUser!!, ref, this).execute()
             }
         }, Response.ErrorListener { e ->
             // Your error code here
-                progressBar?.visibility = View.GONE
-                infoText?.text = "Cant verify payment"
-                infoText?.visibility = View.VISIBLE
-                setDailogButtons()
+            progressBar?.visibility = View.GONE
+            infoText?.text = "Cant verify payment"
+            infoText?.visibility = View.VISIBLE
+            setDailogButtons()
         }) {
             override fun getParams(): Map<String, String> = mapOf("code" to ref, "amount" to amount)
         }
@@ -231,26 +222,27 @@ class Options : AppCompatActivity() {
     }
 
 
-     fun getUser() {
-            val userRef = FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid)
-            userRef.addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onCancelled(p0: DatabaseError?) {
+    fun getUser(num: Int) {
+        val userRef = FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid)
+        userRef.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError?) {
 
+            }
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                mUser = p0?.getValue(User::class.java)
+                if (mUser?.coupons != null){
+                    price = (num * 0.95).toInt()
+                    cartDiscountedTotal.text = "Discounted Total: NGN"+price.toString()+".00"
+                    cartTotal.text = "Total: NGN"+num+".00"
+                    cartTotal.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG)
+                }else{
+                    price = num
+                    cartDiscountedTotal?.visibility = View.GONE
+                    cartTotal.text = "Total: NGN"+num+".00"
                 }
+            }
 
-                override fun onDataChange(p0: DataSnapshot?) {
-                    mUser = p0?.getValue(User::class.java)
-                    Log.e("User", mUser?.email)
-                }
-
-            })
+        })
     }
-
-    fun placeOrder(cloth: Cloth, ref: String){
-        val cloths = ArrayList<Cloth>()
-        cloth.selectedOption = adapter?.selectedOptions
-        cloths.add(cloth)
-        PlaceOrdersTask(cloths, mUser!!, ref, this).execute()
-    }
-
 }

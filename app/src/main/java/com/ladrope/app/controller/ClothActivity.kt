@@ -1,5 +1,7 @@
 package com.ladrope.app.controller
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -10,10 +12,7 @@ import android.support.v7.widget.CardView
 import android.text.Html
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,8 +20,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.ladrope.app.Model.Cloth
 import com.ladrope.app.R
+import com.ladrope.app.Service.getLocalBitmapUri
+import com.ladrope.app.Service.updateCoupon
 import com.ladrope.app.Utilities.GENDER
 import com.ladrope.app.Utilities.SELECTEDCLOTH
+import com.ladrope.app.Utilities.SHARE_INTENT_CODE
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_cloth.*
 
@@ -93,6 +95,9 @@ class ClothActivity : AppCompatActivity() {
         clothNumComment.text = mCloth?.numComment.toString()
         clothNumLikes.text = mCloth?.likes.toString()
 
+        clothCommentBtn.setColorFilter(resources.getColor(R.color.colorPrimary))
+        clothShareBtn.setColorFilter(resources.getColor(R.color.colorPrimary))
+
         mCloth?.liked = getLikeStatus()
 
         status = getLikeStatus()
@@ -101,6 +106,12 @@ class ClothActivity : AppCompatActivity() {
             showLiked()
         }else{
             hideLiked()
+        }
+
+        clothLabelName.setOnClickListener {
+            val tailorIntent = Intent(this, Tailor::class.java)
+            tailorIntent.putExtra("labelId", mCloth?.labelId)
+            startActivity(tailorIntent)
         }
     }
 
@@ -166,7 +177,7 @@ class ClothActivity : AppCompatActivity() {
     }
 
     fun share(view: View){
-
+        shareDesign(mCloth!!, this)
     }
 
     fun comment(view: View){
@@ -177,12 +188,14 @@ class ClothActivity : AppCompatActivity() {
 
     fun showLiked(){
         clothLikeFilledBtn.visibility = View.VISIBLE
+        clothLikeFilledBtn.setColorFilter(resources.getColor(R.color.colorPrimary))
         clothLikeOutLineBtn.visibility = View.GONE
     }
 
     fun hideLiked(){
         clothLikeFilledBtn.visibility = View.GONE
         clothLikeOutLineBtn.visibility = View.VISIBLE
+        clothLikeOutLineBtn.setColorFilter(resources.getColor(R.color.colorPrimary))
     }
 
     fun getLikeStatus(): Boolean{
@@ -228,5 +241,26 @@ class ClothActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    fun shareDesign(cloth: Cloth, context: Context){
+        val text = "https://ladrope.com/cloth/${cloth.clothKey}"
+        val pictureUri = getLocalBitmapUri(cloth.image1!!, context)
+        val shareIntent = Intent()
+        shareIntent.setAction(Intent.ACTION_SEND)
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
+        shareIntent.putExtra(Intent.EXTRA_STREAM, pictureUri)
+        shareIntent.setPackage("com.whatsapp")
+        shareIntent.type = "image/*"
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivityForResult(Intent.createChooser(shareIntent, "Share design"), SHARE_INTENT_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == SHARE_INTENT_CODE){
+            Toast.makeText(this, "You have earned one 5% discount coupon", Toast.LENGTH_LONG).show()
+            updateCoupon()
+        }
     }
 }

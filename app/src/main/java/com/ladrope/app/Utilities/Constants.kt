@@ -13,3 +13,6 @@ var SELECTEDCLOTH: Cloth? = null
 val VERIFY_PAYMENT_URL = "https://ladrope.com/verify"
 val COMMENT_REPORT_URL = "https://ladrope.com/comment"
 val ADMIN_CHANNEL_ID = "Ladrope"
+val REQUEST_VIDEO_CAPTURE = 12938
+val PERMISSION_REQUEST_CODE = 200
+val SHARE_INTENT_CODE = 234
