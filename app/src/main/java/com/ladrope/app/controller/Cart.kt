@@ -50,6 +50,7 @@ class Cart : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
 
+
         cartItems = ArrayList()
         getCartItems()
 

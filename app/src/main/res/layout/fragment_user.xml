@@ -17,171 +17,184 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/userStory"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="20dp">
-
-            <Button
-                android:id="@+id/userTabLogout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@android:color/transparent"
-                android:text="logout"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userInfoCard" />
-
-            <ImageView
-                android:id="@+id/userTabProfilePicture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_account_box_black_24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/UserTabEditBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:text="Edit"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userTabProfilePicture" />
-
-            <TextView
-                android:id="@+id/userTabDisplayName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="16dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/UserTabEditBtn"
-                tools:text="User DisplayName" />
-
-            <TextView
-                android:id="@+id/userTabUserCoupon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userTabDisplayName" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <android.support.v7.widget.CardView
-                android:id="@+id/userInfoCard"
+                android:id="@+id/userStory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userTabUserCoupon">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
+                <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:paddingBottom="20dp">
+
+                    <Button
+                        android:id="@+id/userTabLogout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@android:color/transparent"
+                        android:text="logout"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/userInfoCard" />
+
+                    <ImageView
+                        android:id="@+id/userTabProfilePicture"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:minHeight="100dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/placeholder"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/userTabEmail"
-                        android:layout_width="match_parent"
+                        android:id="@+id/UserTabEditBtn"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@android:drawable/ic_dialog_email"
-                        android:drawablePadding="5dp"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="10dp"
-                        android:textAppearance="@android:style/TextAppearance.Medium"
-                        tools:text="ryme4kings@gmail.com" />
+                        android:layout_marginEnd="24dp"
+                        android:text="Edit"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/userTabProfilePicture" />
 
                     <TextView
-                        android:id="@+id/userTabPhone"
-                        android:layout_width="match_parent"
+                        android:id="@+id/userTabDisplayName"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@android:drawable/stat_sys_phone_call"
-                        android:drawablePadding="5dp"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="10dp"
-                        android:textAppearance="@android:style/TextAppearance.Medium"
-                        tools:text="08095839485" />
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="16dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/UserTabEditBtn"
+                        tools:text="User DisplayName" />
 
                     <TextView
-                        android:id="@+id/userTabAddress"
-                        android:layout_width="match_parent"
+                        android:id="@+id/userTabUserCoupon"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_home_black_24dp"
-                        android:drawablePadding="10dp"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="10dp"
-                        android:textAppearance="@android:style/TextAppearance.Medium"
-                        tools:text="No 4 Olanipekun street" />
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="8dp"
+                        android:text="TextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/userTabDisplayName" />
 
-                    <TextView
-                        android:id="@+id/userTabHieght"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/userInfoCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_accessibility_black_24dp"
-                        android:drawablePadding="10dp"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="10dp"
-                        android:textAppearance="@android:style/TextAppearance.Medium"
-                        tools:text="70 inc" />
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/userTabUserCoupon">
 
-                    <TextView
-                        android:id="@+id/userTabMeasure"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:drawableLeft="@drawable/ic_switch_video_black_24dp"
-                        android:drawablePadding="5dp"
-                        android:drawableRight="@android:drawable/ic_menu_directions"
-                        android:drawableTint="@color/colorPrimaryDark"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="10dp"
-                        android:text="Click to Measure"
-                        android:textAppearance="@android:style/TextAppearance.Medium" />
-                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/userTabEmail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@android:drawable/ic_dialog_email"
+                                android:drawablePadding="5dp"
+                                android:drawableTint="@color/colorPrimaryDark"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="10dp"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                tools:text="ryme4kings@gmail.com" />
+
+                            <TextView
+                                android:id="@+id/userTabPhone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@android:drawable/stat_sys_phone_call"
+                                android:drawablePadding="5dp"
+                                android:drawableTint="@color/colorPrimaryDark"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="10dp"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                tools:text="08095839485" />
+
+                            <TextView
+                                android:id="@+id/userTabAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_home_black_24dp"
+                                android:drawablePadding="10dp"
+                                android:drawableTint="@color/colorPrimaryDark"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="10dp"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                tools:text="No 4 Olanipekun street" />
+
+                            <TextView
+                                android:id="@+id/userTabHieght"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_accessibility_black_24dp"
+                                android:drawablePadding="10dp"
+                                android:drawableTint="@color/colorPrimaryDark"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="10dp"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                tools:text="70 inc" />
+
+                            <TextView
+                                android:id="@+id/userTabMeasure"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:drawableLeft="@drawable/ic_switch_video_black_24dp"
+                                android:drawablePadding="5dp"
+                                android:drawableRight="@android:drawable/ic_menu_directions"
+                                android:drawableTint="@color/colorPrimaryDark"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:paddingTop="10dp"
+                                android:text="Click to Measure"
+                                android:textAppearance="@android:style/TextAppearance.Medium" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </android.support.constraint.ConstraintLayout>
+
             </android.support.v7.widget.CardView>
         </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

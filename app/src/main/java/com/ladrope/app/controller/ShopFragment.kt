@@ -227,6 +227,7 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 labelName.setOnClickListener {
                     val tailorIntent = Intent(context, Tailor::class.java)
                     tailorIntent.putExtra("labelId", cloth.labelId)
+                    tailorIntent.putExtra("labelName", cloth.label)
                     startActivity(tailorIntent)
                 }
 

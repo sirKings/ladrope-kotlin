@@ -2,10 +2,12 @@ package com.ladrope.app.controller
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -22,15 +24,17 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.ladrope.app.Model.User
 import com.ladrope.app.R
 import com.ladrope.app.Service.createUser
+import com.ladrope.app.Service.saveUserPushId
 import com.ladrope.app.Utilities.RC_SIGN_IN
 import kotlinx.android.synthetic.main.activity_login.*
-
+import kotlinx.android.synthetic.main.email.view.*
 
 
 class Login : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth? = null
     private var progressBar: ProgressBar? = null
+    private var alertDialog: AlertDialog? = null
 
     //google sign in client
     private var mGoogleSignInClient: GoogleSignInClient? = null
@@ -68,6 +72,7 @@ class Login : AppCompatActivity() {
                                 println("signInWithEmail:success")
                                 startLogin(true)
                                 goHome()
+                                saveUserPushId()
                             } else {
                                 // If sign in fails, display a message to the user.
                                 println("signInWithEmail:failure")
@@ -151,6 +156,7 @@ class Login : AppCompatActivity() {
                         val newUser = User(currentUser?.displayName, currentUser?.email, currentUser?.photoUrl.toString(), null,null,null,null,null,null)
                         createUser(newUser,currentUser?.uid)
                         goHome()
+                        saveUserPushId()
                     } else {
                         // If sign in fails, display a message to the user.
                         println("signInWithCredential:failure")
@@ -161,5 +167,48 @@ class Login : AppCompatActivity() {
                     }
 
                 }
+    }
+
+    fun forgetPassword(view: View){
+        val layoutInflater = LayoutInflater.from(this)
+        val view = layoutInflater.inflate(R.layout.email, null)
+        alertDialog = AlertDialog.Builder(this).create()
+
+        alertDialog?.setCanceledOnTouchOutside(false)
+        val emailInput = view.editText
+        alertDialog?.setButton(AlertDialog.BUTTON_POSITIVE, "Reset Password") { dialog, which ->
+
+            }
+        alertDialog?.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { dialog, which -> dialog.dismiss() }
+
+        alertDialog?.setView(view)
+        alertDialog?.show()
+
+        val b = alertDialog?.getButton(AlertDialog.BUTTON_POSITIVE)
+        b?.setOnClickListener(object : View.OnClickListener {
+
+            override fun onClick(p0: View?) {
+                val email = emailInput.text.toString()
+                if(isValidEmail(email)){
+                    progressBar?.visibility = View.VISIBLE
+                    progressBar?.bringToFront()
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnCompleteListener {
+                        Toast.makeText(this@Login, "We have sent you instructions to reset your password", Toast.LENGTH_SHORT).show()
+                        progressBar?.visibility = View.GONE
+                        alertDialog?.dismiss()
+                    }
+                            .addOnFailureListener {
+                                Toast.makeText(this@Login, "Reset password email not sent. Try again later", Toast.LENGTH_SHORT).show()
+                                progressBar?.visibility = View.GONE
+                                alertDialog?.dismiss()
+                            }
+
+                }else{
+                    Toast.makeText(this@Login, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+
+                }
+
+            }
+        })
     }
 }

@@ -39,6 +39,9 @@ class Tailor : AppCompatActivity() {
         setContentView(R.layout.activity_tailor)
 
         val labelId = intent.extras.get("labelId") as String
+        val labelName = intent.extras.get("labelName") as String
+
+        supportActionBar?.title = labelName
 
         uid = FirebaseAuth.getInstance().uid
 

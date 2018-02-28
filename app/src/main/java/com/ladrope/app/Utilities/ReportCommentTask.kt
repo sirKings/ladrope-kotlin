@@ -11,7 +11,7 @@ import com.android.volley.toolbox.Volley
  * Created by USER on 2/9/18.
  */
 
-class ReportCommentTask constructor(private val clothKey: String, private val uid: String, private val context: Context) : AsyncTask<String?, String?, String?>() {
+class ReportCommentTask constructor(private val clothKey: String, private val uid: String, private val comment: String, private val context: Context) : AsyncTask<String?, String?, String?>() {
     override fun doInBackground(vararg str: String?): String? {
 
         val queue = Volley.newRequestQueue(context)
@@ -23,7 +23,7 @@ class ReportCommentTask constructor(private val clothKey: String, private val ui
             // Your error code here
 
         }) {
-            override fun getParams(): Map<String, String> = mapOf("clothKey" to clothKey, "uid" to uid)
+            override fun getParams(): Map<String, String> = mapOf("clothKey" to clothKey, "uid" to uid, "comment" to comment)
         }
         queue?.add(stringRequest)
         return null

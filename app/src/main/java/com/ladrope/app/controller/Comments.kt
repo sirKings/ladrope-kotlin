@@ -92,7 +92,7 @@ class Comments : AppCompatActivity() {
                 val numCommentRef = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).child(clothKey).child("numComment")
                 val num = cloth?.numComment!! + 1
                 numCommentRef.setValue(num).addOnCompleteListener {
-                    ReportCommentTask(clothKey!!, uid!!, this).execute()
+                    ReportCommentTask(clothKey!!, uid!!, comment.message!!, this).execute()
                 }
             }
         }

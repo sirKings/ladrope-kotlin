@@ -160,12 +160,15 @@ class StartMeasure : AppCompatActivity(), SensorEventListener {
 
             override fun onStart(requestId: String?) {
                 Log.e("Service Upload", "Started")
+                Toast.makeText(applicationContext, "Video submission started", Toast.LENGTH_SHORT).show()
             }
 
             override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
                 Log.e("Service Upload", resultData.toString())
+                Toast.makeText(applicationContext, "Video submitted", Toast.LENGTH_SHORT).show()
 
-                val fdelete = File(uri.getPath())
+                val fdelete = File(uri.path)
+                    fdelete.delete()
                 if (fdelete.exists()) {
                     if (fdelete.delete()) {
                         System.out.println("file Deleted :" + uri.getPath())

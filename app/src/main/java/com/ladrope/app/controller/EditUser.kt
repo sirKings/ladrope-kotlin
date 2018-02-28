@@ -81,7 +81,7 @@ class EditUser : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 userName.setText(mUser?.displayName)
                 userHieght.setText(heightText)
 
-                Picasso.with(this@EditUser).load(mUser?.photoURL).placeholder(R.drawable.ic_account_box_black_24dp).into(userImage)
+                Picasso.with(this@EditUser).load(mUser?.photoURL).placeholder(R.drawable.placeholder).into(userImage)
             }
         })
 

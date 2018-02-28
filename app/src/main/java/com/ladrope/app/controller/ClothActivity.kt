@@ -40,8 +40,24 @@ class ClothActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cloth)
+        var clothKey = ""
+        try {
+            clothKey = intent.extras.get("clothKey") as String
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
 
-        val clothKey = intent.extras.get("clothKey") as String
+        if (clothKey == ""){
+            try {
+                val data = intent.data
+                val keyIndex = data.encodedPath.lastIndexOf("/")
+                clothKey = data.encodedPath.substring(keyIndex+1)
+
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+
 
         getCloth(clothKey)
         uid = FirebaseAuth.getInstance().uid
@@ -52,6 +68,7 @@ class ClothActivity : AppCompatActivity() {
 
         mClothStory?.visibility = View.GONE
         mProgressBar?.visibility = View.VISIBLE
+
 
     }
 
@@ -111,6 +128,7 @@ class ClothActivity : AppCompatActivity() {
         clothLabelName.setOnClickListener {
             val tailorIntent = Intent(this, Tailor::class.java)
             tailorIntent.putExtra("labelId", mCloth?.labelId)
+            tailorIntent.putExtra("labelName", mCloth?.label)
             startActivity(tailorIntent)
         }
     }
@@ -231,6 +249,8 @@ class ClothActivity : AppCompatActivity() {
                 mCloth = cloth
                 mClothStory?.visibility = View.VISIBLE
                 mProgressBar?.visibility = View.GONE
+                val ab = supportActionBar
+                ab?.title = mCloth?.name
                 startSetup()
             }
 
