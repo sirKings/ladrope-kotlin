@@ -77,7 +77,7 @@ class CreateAccount : AppCompatActivity() {
                                         val profileUpdates = UserProfileChangeRequest.Builder()
                                                 .setDisplayName(name).build()
                                         currentUser?.updateProfile(profileUpdates)?.addOnCompleteListener {
-                                            val newUser = User(currentUser?.displayName!!, currentUser.email!!, "default", null,null,null,null,null,null)
+                                            val newUser = User(currentUser?.displayName!!, currentUser.email!!, "default", null,null,"male",null,null,null)
                                             createUser(newUser,currentUser.uid)
                                         }
                                         startLogin(true)
@@ -170,7 +170,7 @@ class CreateAccount : AppCompatActivity() {
                         println("signInWithCredential:success")
                         startLogin(true)
                         val currentUser = mAuth?.currentUser
-                        val newUser = User(currentUser?.displayName, currentUser?.email, currentUser?.photoUrl.toString(), null,null,null,null,null,null)
+                        val newUser = User(currentUser?.displayName, currentUser?.email, currentUser?.photoUrl.toString(), null,null,"male",null,null,null)
                         createUser(newUser,currentUser?.uid)
                         goHome()
                         saveUserPushId()

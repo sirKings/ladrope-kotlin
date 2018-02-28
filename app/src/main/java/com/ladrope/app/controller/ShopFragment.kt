@@ -3,6 +3,7 @@ package com.ladrope.app.controller
 
 import android.app.Activity
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -23,7 +24,9 @@ import com.ladrope.app.Model.Cloth
 import com.ladrope.app.R
 import com.ladrope.app.Service.getLocalBitmapUri
 import com.ladrope.app.Service.updateCoupon
+import com.ladrope.app.Service.userRef
 import com.ladrope.app.Utilities.GENDER
+import com.ladrope.app.Utilities.GENDER_TYPE
 import com.ladrope.app.Utilities.SHARE_INTENT_CODE
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.filter.view.*
@@ -42,6 +45,7 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     var shopRV: RecyclerView? = null
     var mProgressBar: ProgressBar? =null
     var mErrorText: TextView? = null
+    var mEmptyText: TextView? = null
     var mCartItem:  TextView? = null
     var alertDialog: AlertDialog? = null
     var uid: String? = null
@@ -53,6 +57,7 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mProgressBar = view.findViewById(R.id.shopProgressBar)
         mErrorText = view.findViewById(R.id.shopErrorText)
+        mEmptyText = view.findViewById(R.id.shopEmptyText)
         shopRV = view.findViewById(R.id.shopRecyclerView)
 
         view.shopFilterBtn.setColorFilter(resources.getColor(R.color.cardview_light_background))
@@ -61,6 +66,17 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         uid = FirebaseAuth.getInstance().uid
 
         getCartItems(uid)
+
+        try {
+            val sharedPref = activity?.getSharedPreferences("LADROPE", Context.MODE_PRIVATE)
+            val gender = sharedPref?.getString(GENDER_TYPE, GENDER)
+            if (gender!=null){
+                GENDER = gender
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
 
         val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("date")
         setup(query)
@@ -90,12 +106,11 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark)
 
-
         return view
     }
 
     fun setup(query: Query){
-
+        Log.e("setup", "started")
         options = FirebaseRecyclerOptions.Builder<Cloth>()
                 .setQuery(query, Cloth::class.java)
                 .build()
@@ -147,7 +162,11 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             super.onDataChanged()
             mProgressBar?.visibility = View.GONE
             swipeRefreshLayout?.isRefreshing = false
+            if(adapter?.itemCount == 0){
+                mEmptyText?.visibility = View.VISIBLE
+            }
         }
+
 
         override fun onError(error: DatabaseError) {
             super.onError(error)
@@ -365,15 +384,15 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         alertDialog = AlertDialog.Builder(context!!).create()
 
         val classList = arrayOf("Filter by type","Casual wears", "Corporate wears", "Traditional wears", "Shirts", "Trousers", "Gown", "Wedding Outfits", "Suits", "Ankara")
-        //val priceList = arrayOf("Filter by price","Less than NGN5000", "Less than NGN50000", "Less than NGN100000")
+        val genderList = arrayOf("Filter by gender","male","female")
 
         val classAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, classList)
-        //val priceAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, priceList)
+        val genderAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, genderList)
 
         view.filterClassSpinner.adapter = classAdapter
-        //view.filterPriceSpinner.adapter = priceAdapter
+        view.filterGenderSpinner.adapter = genderAdapter
         classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        //priceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         alertDialog?.setButton(AlertDialog.BUTTON_POSITIVE, "Ok") { dialog, which ->
 
@@ -387,10 +406,10 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         b?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 val clas = view.filterClassSpinner.selectedItem as String
-                //val price = view.filterPriceSpinner.selectedItem as String
+                val gender = view.filterGenderSpinner.selectedItem as String
 
                 var filterClass: String? = ""
-                //var filterPrice: String? = ""
+                var filterGender: String? = ""
 
                 when (clas){
                     "Filter by type" -> filterClass = null
@@ -405,21 +424,51 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     "Suits" -> filterClass = "suit"
                 }
 
-                if (filterClass != null){
+                when (gender){
+                    "Filter by gender" -> filterGender = null
+                    "male" -> filterGender = "male"
+                    "female" -> filterGender = "female"
+                }
+
+                if (filterClass != null && filterGender != null){
+                    GENDER = filterGender
                     val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("tags").equalTo(filterClass)
                     mProgressBar?.visibility = View.VISIBLE
                     setup(query)
                     adapter?.startListening()
+                    updateGender()
+
+                }else if (filterClass != null && filterGender == null){
+                    val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("tags").equalTo(filterClass)
+                    mProgressBar?.visibility = View.VISIBLE
+                    setup(query)
+                    adapter?.startListening()
+                } else if (filterClass == null && filterGender != null){
+                    GENDER = filterGender
+                    val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("date")
+                    mProgressBar?.visibility = View.VISIBLE
+                    setup(query)
+                    adapter?.startListening()
+                    updateGender()
                 }
                 alertDialog?.dismiss()
             }
         })
     }
 
+
     override fun onRefresh() {
         val query = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).orderByChild("date")
         setup(query)
         adapter?.startListening()
+    }
+
+    fun updateGender(){
+        userRef.child(FirebaseAuth.getInstance().uid).child("gender").setValue(GENDER)
+        val sharedPref = activity?.getSharedPreferences("LADROPE", MODE_PRIVATE)?.edit()
+        sharedPref?.putString(GENDER_TYPE, GENDER)
+        sharedPref?.apply()
+
     }
 
 }// Required empty public constructor
