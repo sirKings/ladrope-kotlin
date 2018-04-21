@@ -58,8 +58,8 @@ class OrderActivity : AppCompatActivity() {
         databaseref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot?) {
                 order = p0?.getValue(Order::class.java)
-                activityLabelName.text = order?.label
-                activityOrderName.text = order?.name
+                activityLabelName.text = order?.label?.capitalize()
+                activityOrderName.text = order?.name?.capitalize()
                 activityOrderPrice.text = "NGN"+order?.price!!.toString() +".00"
                 activityOrderStatus.text = order?.status
                 activityOrderDeliveryDate.text = formatDate(order?.date!!)

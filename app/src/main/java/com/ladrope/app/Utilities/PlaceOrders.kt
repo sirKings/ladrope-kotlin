@@ -143,7 +143,7 @@ private class CallTailorTask constructor(private val num: String, private val co
         }else{
             phoneNumber = num
         }
-        val baseUrl = "http://smsplus4.routesms.com:8080/bulksms/bulksms?username=ladrope&password=rB6V4KDt&type=0&dlr=1&destination=$phoneNumber&source=LadRope&message=Hello%20you%20just%20got%20an%20order%20on%20Ladrope.com.%20Endeavour%20to%20complete%20and%20deliver%20on%20schedule"
+        val baseUrl = "http://ngn.rmlconnect.net/bulksms/bulksms?username=ladrope&password=rB6V4KDt&type=0&dlr=1&destination=$phoneNumber&source=LadRope&message=Hello%20you%20just%20got%20an%20order%20on%20Ladrope.com.%20Endeavour%20to%20complete%20and%20deliver%20on%20schedule"
 
         val getRequest = StringRequest(Request.Method.POST, baseUrl,
                 object : Response.Listener<String> {

@@ -36,8 +36,8 @@ class SearchViewAdapter(private val list: ArrayList<Cloth?>?, private val contex
             val searchClothName = itemView.searchClothName
             val searchClothLabel = itemView.searchLabelName
 
-            searchClothLabel?.text = cloth.label
-            searchClothName?.text = cloth.name
+            searchClothLabel?.text = cloth.label?.capitalize()
+            searchClothName?.text = cloth.name?.capitalize()
             Picasso.with(context).load(cloth.image1).placeholder(R.drawable.ic_account_box_black_24dp).into(searchImage)
 
 

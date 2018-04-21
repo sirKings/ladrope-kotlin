@@ -1,7 +1,9 @@
 package com.ladrope.app.controller
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.util.Log
@@ -23,7 +25,6 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.ladrope.app.Model.User
 import com.ladrope.app.R
 import com.ladrope.app.Service.createUser
-import com.ladrope.app.Service.saveUserPushId
 import com.ladrope.app.Utilities.RC_SIGN_UP
 import kotlinx.android.synthetic.main.activity_create_account.*
 import kotlinx.android.synthetic.main.activity_login.*
@@ -55,6 +56,15 @@ class CreateAccount : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
+    fun seeTerms(view: View) {
+        val builder = CustomTabsIntent.Builder()
+        builder.setToolbarColor(resources.getColor(R.color.colorPrimary))
+        val customTabsIntent = builder.build()
+        customTabsIntent.intent.setPackage("com.android.chrome")
+        customTabsIntent.launchUrl(this, Uri.parse("https://ladrope.com/privacy"))
+        //Log.e("web", "called")
+    }
+
 
 
     fun createAccount(view: View){
@@ -82,7 +92,6 @@ class CreateAccount : AppCompatActivity() {
                                         }
                                         startLogin(true)
                                         goHome()
-                                        saveUserPushId()
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         println("signInWithEmail:failure")
@@ -173,7 +182,7 @@ class CreateAccount : AppCompatActivity() {
                         val newUser = User(currentUser?.displayName, currentUser?.email, currentUser?.photoUrl.toString(), null,null,"male",null,null,null)
                         createUser(newUser,currentUser?.uid)
                         goHome()
-                        saveUserPushId()
+
                     } else {
                         // If sign in fails, display a message to the user.
                         println("signInWithCredential:failure")

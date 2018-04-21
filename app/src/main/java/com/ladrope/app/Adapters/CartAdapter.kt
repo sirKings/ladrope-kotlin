@@ -39,8 +39,8 @@ class CartAdapter(private val list: ArrayList<Cloth>?, private val context: Cont
             val price = itemView.cartItemPrice
             val remove = itemView.cartRemoveBtn
 
-            name.text = item.name
-            label.text = item.label
+            name.text = item.name?.capitalize()
+            label.text = item.label?.capitalize()
             price.text = "Price: NGN"+item.price.toString()+".00"
             Picasso.with(context).load(item.image1).placeholder(R.drawable.ic_account_box_black_24dp).into(image)
 

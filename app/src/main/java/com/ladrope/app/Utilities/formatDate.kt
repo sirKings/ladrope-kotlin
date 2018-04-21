@@ -12,7 +12,10 @@ fun formatDate(str: Any): String{
     //Thu Feb 15 09:57:06 GMT+00:00 2018
     if (str is String){
         var pattern = ""
-        if(str.length < 26) {
+        if (str.length == 25) {
+            pattern = "yyyy-MM-dd HH:mm:ss Z"
+        }
+        else if(str.length < 26) {
             pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         } else{
             pattern = "E MMM dd yyyy HH:mm:ss Z"

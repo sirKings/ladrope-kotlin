@@ -28,9 +28,15 @@ import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.ladrope.app.Model.PendingOrder
 import com.ladrope.app.R
 import com.ladrope.app.Utilities.PERMISSION_REQUEST_CODE
 import com.ladrope.app.Utilities.REQUEST_VIDEO_CAPTURE
+import com.ladrope.app.Utilities.SubmitOrdersTask
 import kotlinx.android.synthetic.main.activity_start_measure.*
 import java.io.File
 
@@ -166,6 +172,7 @@ class StartMeasure : AppCompatActivity(), SensorEventListener {
             override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
                 Log.e("Service Upload", resultData.toString())
                 Toast.makeText(applicationContext, "Video submitted", Toast.LENGTH_SHORT).show()
+                checkAndSubmitOrder()
 
                 val fdelete = File(uri.path)
                     fdelete.delete()
@@ -240,6 +247,30 @@ class StartMeasure : AppCompatActivity(), SensorEventListener {
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show()
+    }
+
+    fun checkAndSubmitOrder(){
+
+        val userRef = FirebaseDatabase.getInstance().reference.child("users").child(FirebaseAuth.getInstance().uid).child("savedOrders")
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot?) {
+                val savedOrders = ArrayList<PendingOrder>()
+                if (p0!!.exists()){
+
+                    for (item in p0.children){
+                        val order = item.getValue(PendingOrder::class.java)
+                        savedOrders.add(order!!)
+                    }
+                    SubmitOrdersTask(savedOrders, this@StartMeasure)
+                }
+
+            }
+
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+
+        })
     }
 
 

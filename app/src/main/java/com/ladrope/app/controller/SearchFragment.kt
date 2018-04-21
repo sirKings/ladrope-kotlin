@@ -93,6 +93,11 @@ class SearchFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        getCloths()
+    }
+
     fun filterClothList(str: String){
         clothList?.clear()
         for (cloth: Cloth? in mainClothList){

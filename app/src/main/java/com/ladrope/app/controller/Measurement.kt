@@ -14,8 +14,11 @@ class Measurement : AppCompatActivity() {
     }
 
     fun measurementUsePhone(view: View){
-        val usePhoneIntent = Intent(this, UsePhone::class.java)
-        startActivity(usePhoneIntent)
+        val startCame = Intent(this, ImageCapture::class.java)
+        startActivity(startCame)
+
+//        val usePhoneIntent = Intent(this, UsePhone::class.java)
+//        startActivity(usePhoneIntent)
     }
 
     fun measurementEnterMeasurement(view: View){

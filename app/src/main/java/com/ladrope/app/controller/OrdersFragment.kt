@@ -158,7 +158,7 @@ class OrdersFragment : Fragment() {
                 val deliveryDate = itemView.findViewById<TextView>(R.id.orderDeliveryDate)
                 val orderImage = itemView.findViewById<ImageView>(R.id.orderImageView)
 
-                orderName.text = order.name
+                orderName.text = order.name?.capitalize()
                 status.text = order.status
                 startDate.text = formatDate(order.startDate!!)
                 if (type == "saved"){

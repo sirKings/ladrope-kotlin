@@ -111,6 +111,8 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     fun setup(query: Query){
         Log.e("setup", "started")
+        mErrorText?.visibility = View.GONE
+        mEmptyText?.visibility = View.GONE
         options = FirebaseRecyclerOptions.Builder<Cloth>()
                 .setQuery(query, Cloth::class.java)
                 .build()
@@ -211,7 +213,7 @@ class ShopFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     hideLiked()
                 }
 
-                clothName.text = cloth.name
+                clothName.text = cloth.name?.capitalize()
                 if(cloth.label!!.length > 18){
                     labelName.text = cloth.label?.substring(0,17)
                 }else{

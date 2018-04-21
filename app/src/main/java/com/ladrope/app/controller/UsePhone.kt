@@ -12,10 +12,8 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.MediaController
 import com.ladrope.app.R
 import com.ladrope.app.Service.NotificationPublisher
-import kotlinx.android.synthetic.main.activity_use_phone.*
 
 
 class UsePhone : AppCompatActivity() {
@@ -24,13 +22,6 @@ class UsePhone : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_use_phone)
 
-        measurementVideo.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.measurement)
-        measurementVideo.start()
-
-        val mediaController = MediaController(this)
-        mediaController.setAnchorView(measurementVideo)
-
-        measurementVideo.setMediaController(mediaController)
     }
 
     fun RemindLater(view: View){

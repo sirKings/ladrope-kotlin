@@ -23,9 +23,6 @@ class MainActivity : AppCompatActivity() {
         }catch (e: Exception){
             e.printStackTrace()
         }
-//        if (intent.extras != null){
-//            clothKey = intent.extras.get("clothKey") as String
-//        }
 
         if (mAuth.currentUser?.uid != null){
 

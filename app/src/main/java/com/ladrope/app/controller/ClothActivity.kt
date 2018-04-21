@@ -36,6 +36,7 @@ class ClothActivity : AppCompatActivity() {
     var mProgressBar: ProgressBar? = null
     var mClothStory: CardView? = null
     var mErrorText: TextView? = null
+    var mEmptyText: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +66,7 @@ class ClothActivity : AppCompatActivity() {
         mProgressBar = clothProgressBar
         mClothStory = clothStory
         mErrorText = clothErrorText
+        mEmptyText = clothEmptyText
 
         mClothStory?.visibility = View.GONE
         mProgressBar?.visibility = View.VISIBLE
@@ -101,11 +103,11 @@ class ClothActivity : AppCompatActivity() {
 
         })
 
-        clothClothName.text = mCloth?.name
+        clothClothName.text = mCloth?.name?.capitalize()
         clothClothPrice.text = "NGN"+mCloth?.price+".00"
-        clothDescription.text = mCloth?.description
-        clothFabricType.text = mCloth?.fabricType
-        clothLabelName.text = mCloth?.label
+        clothDescription.text = mCloth?.description?.capitalize()
+        clothFabricType.text = mCloth?.fabricType?.capitalize()
+        clothLabelName.text = mCloth?.label?.capitalize()
         clothNumSold.text = "("+mCloth?.numSold.toString()+")"
         clothRatingBar.rating = mCloth?.rating!!.toFloat()
         clothProdTime.text = mCloth?.time.toString() + " days"
@@ -245,13 +247,20 @@ class ClothActivity : AppCompatActivity() {
         val clothRef = FirebaseDatabase.getInstance().reference.child("cloths").child(GENDER).child(key)
         clothRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot?) {
-                val cloth = p0?.getValue(Cloth::class.java)
-                mCloth = cloth
-                mClothStory?.visibility = View.VISIBLE
-                mProgressBar?.visibility = View.GONE
-                val ab = supportActionBar
-                ab?.title = mCloth?.name
-                startSetup()
+
+                if(p0!!.exists()){
+                    val cloth = p0.getValue(Cloth::class.java)
+                    mCloth = cloth
+                    mClothStory?.visibility = View.VISIBLE
+                    mProgressBar?.visibility = View.GONE
+                    val ab = supportActionBar
+                    ab?.title = mCloth?.name?.capitalize()
+                    startSetup()
+                }else{
+                    mEmptyText?.visibility = View.VISIBLE
+                    mProgressBar?.visibility = View.GONE
+                }
+
             }
 
             override fun onCancelled(p0: DatabaseError?) {

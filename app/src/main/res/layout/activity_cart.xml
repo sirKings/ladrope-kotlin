@@ -65,8 +65,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cartRecyclerView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="358dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="360dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView24">
 

@@ -36,7 +36,7 @@ class OptionsAdapter(private val list: ArrayList<Option?>?, private val context:
             val optionImage = itemView.optionImage
             val optionName = itemView.optionName
 
-            optionName.text = option.name
+            optionName.text = option.name?.capitalize()
             Picasso.with(context).load(option.image).placeholder(R.drawable.ic_account_box_black_24dp).into(optionImage)
 
 

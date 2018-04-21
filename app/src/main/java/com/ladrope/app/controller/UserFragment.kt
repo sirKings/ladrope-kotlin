@@ -74,10 +74,10 @@ class UserFragment : Fragment() {
                     heightText = height.get("height") + " "+height.get("unit")
                 }
 
-                userAddress.text = mUser?.address
+                userAddress.text = mUser?.address?.capitalize()
                 userEmail.text = mUser?.email
                 userPhone.text = mUser?.phone
-                userName.text = mUser?.displayName
+                userName.text = mUser?.displayName?.capitalize()
                 userHieght.text = heightText
                 coupon.text = couponText
                 Picasso.with(context).load(mUser?.photoURL).placeholder(R.drawable.placeholder).into(userImage)

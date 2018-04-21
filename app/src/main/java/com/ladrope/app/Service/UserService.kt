@@ -23,7 +23,9 @@ fun createUser(user: com.ladrope.app.Model.User, uid: String?){
             }
             else
             {
-                userRef.child(uid).setValue(user)
+                userRef.child(uid).setValue(user).addOnCompleteListener {
+                    saveUserPushId()
+                }
             }
         }
         override fun onCancelled(databaseError: DatabaseError) {
